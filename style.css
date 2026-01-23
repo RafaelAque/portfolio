@@ -137,3 +137,14 @@ body.dark footer {
 #mp1-week3 a:hover {
    color: #ff5722;
 }
+
+#m1-summative a {
+   text-decoration: none;
+   color: #4facfe;
+   font-weight: 600;
+   transition: color 0.3s;
+}
+
+#m1-summative a:hover {
+   color: #ff5722;
+}
