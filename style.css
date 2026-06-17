@@ -160,3 +160,13 @@ body.dark footer {
    color: #ff5722;
 }
 
+#fellowshiphub a {
+   text-decoration: none;
+   color: #4facfe;
+   font-weight: 600;
+   transition: color 0.3s;
+}
+
+#fellowshiphub a:hover {
+   color: #ff5722;
+}
