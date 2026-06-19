@@ -3,16 +3,21 @@ const body = document.body;
 
 toggleButton.addEventListener('click', () => {
    body.classList.toggle('dark');
-   toggleButton.textContent = body.classList.contains('dark') 
-      ? '☀️ Switch Theme' 
-      : '🌙 Switch Theme';
+   toggleButton.textContent = body.classList.contains('dark')
+      ? 'Light Theme'
+      : 'Switch Theme';
 });
 
-// Smooth scroll for nav links
-document.querySelectorAll('nav a').forEach(anchor => {
+document.querySelectorAll('nav a, .button-link[href^="#"]').forEach(anchor => {
    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+
+      if (!target) {
+         return;
+      }
+
       e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
+      target.scrollIntoView({
          behavior: 'smooth'
       });
    });
