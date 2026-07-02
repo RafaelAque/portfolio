@@ -2,12 +2,6 @@ const toggleButton = document.getElementById('theme-toggle');
 const body = document.body;
 const navLinks = Array.from(document.querySelectorAll('nav a'));
 const panels = Array.from(document.querySelectorAll('.tab-panel'));
-const toast = document.createElement('div');
-
-toast.className = 'copy-toast';
-toast.setAttribute('role', 'status');
-toast.setAttribute('aria-live', 'polite');
-document.body.appendChild(toast);
 
 const savedTheme = readSavedTheme();
 
@@ -18,7 +12,6 @@ if (savedTheme === 'dark') {
 updateThemeButton();
 setupTabs();
 setupThemeToggle();
-setupCopyButtons();
 setupProjectCards();
 
 function setupTabs() {
@@ -113,14 +106,6 @@ function saveTheme(theme) {
    }
 }
 
-function setupCopyButtons() {
-   document.querySelectorAll('[data-copy-email]').forEach(button => {
-      button.addEventListener('click', () => {
-         copyText(button.dataset.copyEmail);
-      });
-   });
-}
-
 function setupProjectCards() {
    document.querySelectorAll('.project-card').forEach(card => {
       card.addEventListener('mousemove', event => {
@@ -177,42 +162,4 @@ function animateCounter(counter) {
    }
 
    requestAnimationFrame(tick);
-}
-
-async function copyText(text) {
-   try {
-      if (navigator.clipboard) {
-         await navigator.clipboard.writeText(text);
-      } else {
-         fallbackCopy(text);
-      }
-
-      showToast('Email copied');
-   } catch (error) {
-      fallbackCopy(text);
-      showToast('Email copied');
-   }
-}
-
-function fallbackCopy(text) {
-   const input = document.createElement('textarea');
-
-   input.value = text;
-   input.setAttribute('readonly', '');
-   input.style.position = 'fixed';
-   input.style.opacity = '0';
-   document.body.appendChild(input);
-   input.select();
-   document.execCommand('copy');
-   document.body.removeChild(input);
-}
-
-function showToast(message) {
-   toast.textContent = message;
-   toast.classList.add('visible');
-
-   window.clearTimeout(showToast.timeoutId);
-   showToast.timeoutId = window.setTimeout(() => {
-      toast.classList.remove('visible');
-   }, 1800);
 }
