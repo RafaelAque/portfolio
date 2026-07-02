@@ -457,6 +457,42 @@ section li {
    font-weight: 800;
 }
 
+.summary-card {
+   position: relative;
+   display: grid;
+   gap: 18px;
+   max-width: 860px;
+   padding: clamp(20px, 4vw, 32px);
+   overflow: hidden;
+   border: 1px solid rgba(21, 18, 15, 0.08);
+   border-left: 8px solid var(--orange);
+   border-radius: 8px;
+   background:
+      linear-gradient(135deg, rgba(255, 216, 107, 0.18), transparent 46%),
+      var(--surface);
+   box-shadow: 0 10px 24px rgba(28,23,18,0.10);
+}
+
+.summary-card::after {
+   content: "";
+   position: absolute;
+   right: -44px;
+   top: -44px;
+   width: 120px;
+   height: 120px;
+   border-radius: 50%;
+   background: rgba(216, 93, 28, 0.12);
+}
+
+.summary-card p {
+   position: relative;
+   z-index: 1;
+   margin: 0;
+   color: var(--ink);
+   font-size: 1rem;
+   line-height: 1.8;
+}
+
 #projects {
    display: grid;
    grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -645,11 +681,20 @@ body.dark section {
 body.dark section li,
 body.dark .project-card,
 body.dark .stat-card,
-body.dark .cert-card {
+body.dark .cert-card,
+body.dark .summary-card {
    background:
       linear-gradient(135deg, rgba(216, 93, 28, 0.18), transparent 46%),
       var(--surface);
    border-color: rgba(255, 247, 223, 0.1);
+}
+
+body.dark .summary-card {
+   border-left-color: var(--orange-bright);
+}
+
+body.dark .summary-card p {
+   color: var(--ink);
 }
 
 body.dark .cert-card span {
