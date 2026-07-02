@@ -1,19 +1,13 @@
 const toggleButton = document.getElementById('theme-toggle');
 const body = document.body;
 const navLinks = Array.from(document.querySelectorAll('nav a'));
-const sections = Array.from(document.querySelectorAll('main section, footer'));
+const panels = Array.from(document.querySelectorAll('.tab-panel'));
 const toast = document.createElement('div');
-const backToTop = document.createElement('button');
 
 toast.className = 'copy-toast';
 toast.setAttribute('role', 'status');
 toast.setAttribute('aria-live', 'polite');
 document.body.appendChild(toast);
-
-backToTop.className = 'back-to-top';
-backToTop.type = 'button';
-backToTop.textContent = 'Top';
-document.body.appendChild(backToTop);
 
 const savedTheme = readSavedTheme();
 
@@ -22,74 +16,82 @@ if (savedTheme === 'dark') {
 }
 
 updateThemeButton();
+setupTabs();
+setupThemeToggle();
+setupCopyButtons();
+setupProjectCards();
 
-toggleButton.addEventListener('click', () => {
-   body.classList.toggle('dark');
-   saveTheme(body.classList.contains('dark') ? 'dark' : 'light');
-   updateThemeButton();
-});
+function setupTabs() {
+   navLinks.forEach(link => {
+      link.setAttribute('role', 'tab');
+      link.setAttribute('aria-controls', link.hash.slice(1));
+      link.setAttribute('aria-selected', 'false');
 
-document.querySelectorAll('nav a, .button-link[href^="#"]').forEach(anchor => {
-   anchor.addEventListener('click', function(e) {
-      const target = document.querySelector(this.getAttribute('href'));
-
-      if (!target) {
-         return;
-      }
-
-      e.preventDefault();
-      target.scrollIntoView({
-         behavior: 'smooth'
+      link.addEventListener('click', event => {
+         event.preventDefault();
+         activatePanel(link.hash, true);
       });
    });
-});
 
-document.querySelectorAll('[data-copy-email]').forEach(button => {
-   button.addEventListener('click', () => {
-      copyText(button.dataset.copyEmail);
-   });
-});
-
-document.querySelectorAll('.project-card').forEach(card => {
-   card.addEventListener('mousemove', event => {
-      const rect = card.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const rotateX = ((y / rect.height) - 0.5) * -8;
-      const rotateY = ((x / rect.width) - 0.5) * 8;
-
-      card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+   panels.forEach(panel => {
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('tabindex', '0');
    });
 
-   card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
+   document.querySelectorAll('.button-link[href^="#"]').forEach(link => {
+      link.addEventListener('click', event => {
+         event.preventDefault();
+         activatePanel(link.hash, true);
+      });
    });
 
-   card.addEventListener('click', event => {
-      const link = card.querySelector('a');
-
-      if (!link || event.target.closest('a')) {
-         return;
-      }
-
-      link.click();
+   window.addEventListener('hashchange', () => {
+      activatePanel(window.location.hash || '#achievements', false);
    });
-});
 
-backToTop.addEventListener('click', () => {
+   activatePanel(window.location.hash || '#achievements', false);
+}
+
+function activatePanel(hash, updateHash) {
+   const panelId = hash.replace('#', '');
+   const targetPanel = panels.find(panel => panel.id === panelId) || document.getElementById('achievements');
+
+   panels.forEach(panel => {
+      const isActive = panel === targetPanel;
+
+      panel.hidden = !isActive;
+      panel.classList.toggle('active-panel', isActive);
+      panel.setAttribute('aria-hidden', String(!isActive));
+   });
+
+   navLinks.forEach(link => {
+      const isActive = link.hash === `#${targetPanel.id}`;
+
+      link.classList.toggle('active', isActive);
+      link.setAttribute('aria-selected', String(isActive));
+   });
+
+   if (updateHash) {
+      history.pushState(null, '', `#${targetPanel.id}`);
+   }
+
+   if (targetPanel.id === 'snapshot') {
+      setupCounters();
+   }
+
    window.scrollTo({
       top: 0,
       behavior: 'smooth'
    });
-});
+}
 
-window.addEventListener('scroll', () => {
-   backToTop.classList.toggle('visible', window.scrollY > 500);
-}, { passive: true });
-
-setupActiveNavigation();
-setupRevealAnimation();
-setupCounters();
+function setupThemeToggle() {
+   toggleButton.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      saveTheme(body.classList.contains('dark') ? 'dark' : 'light');
+      updateThemeButton();
+   });
+}
 
 function updateThemeButton() {
    toggleButton.textContent = body.classList.contains('dark') ? 'Light Theme' : 'Switch Theme';
@@ -111,78 +113,51 @@ function saveTheme(theme) {
    }
 }
 
-function setupActiveNavigation() {
-   const sectionById = new Map(sections.map(section => [section.id, section]));
-
-   const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-         if (!entry.isIntersecting) {
-            return;
-         }
-
-         navLinks.forEach(link => {
-            const id = link.getAttribute('href').replace('#', '');
-            link.classList.toggle('active', sectionById.get(id) === entry.target);
-         });
+function setupCopyButtons() {
+   document.querySelectorAll('[data-copy-email]').forEach(button => {
+      button.addEventListener('click', () => {
+         copyText(button.dataset.copyEmail);
       });
-   }, {
-      rootMargin: '-45% 0px -45% 0px',
-      threshold: 0
    });
-
-   sections.forEach(section => observer.observe(section));
 }
 
-function setupRevealAnimation() {
-   const revealItems = document.querySelectorAll('main section, .project-card, section li, .stat-card');
+function setupProjectCards() {
+   document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mousemove', event => {
+         const rect = card.getBoundingClientRect();
+         const x = event.clientX - rect.left;
+         const y = event.clientY - rect.top;
+         const rotateX = ((y / rect.height) - 0.5) * -8;
+         const rotateY = ((x / rect.width) - 0.5) * 8;
 
-   if (!('IntersectionObserver' in window)) {
-      revealItems.forEach(item => item.classList.add('visible'));
-      return;
-   }
+         card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+      });
 
-   revealItems.forEach(item => item.classList.add('reveal'));
+      card.addEventListener('mouseleave', () => {
+         card.style.transform = '';
+      });
 
-   const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-         if (!entry.isIntersecting) {
+      card.addEventListener('click', event => {
+         const link = card.querySelector('a');
+
+         if (!link || event.target.closest('a')) {
             return;
          }
 
-         entry.target.classList.add('visible');
-         observer.unobserve(entry.target);
+         link.click();
       });
-   }, {
-      threshold: 0.16
    });
-
-   revealItems.forEach(item => observer.observe(item));
 }
 
 function setupCounters() {
-   const counters = document.querySelectorAll('[data-count]');
+   document.querySelectorAll('[data-count]').forEach(counter => {
+      if (counter.dataset.counted === 'true') {
+         return;
+      }
 
-   if (!('IntersectionObserver' in window)) {
-      counters.forEach(counter => {
-         counter.textContent = counter.dataset.count;
-      });
-      return;
-   }
-
-   const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-         if (!entry.isIntersecting) {
-            return;
-         }
-
-         animateCounter(entry.target);
-         observer.unobserve(entry.target);
-      });
-   }, {
-      threshold: 0.65
+      counter.dataset.counted = 'true';
+      animateCounter(counter);
    });
-
-   counters.forEach(counter => observer.observe(counter));
 }
 
 function animateCounter(counter) {

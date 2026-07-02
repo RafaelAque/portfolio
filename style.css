@@ -44,6 +44,10 @@ body::before {
    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.42), transparent 72%);
 }
 
+[hidden] {
+   display: none !important;
+}
+
 header {
    position: relative;
    overflow: hidden;
@@ -225,7 +229,8 @@ button:hover {
 main {
    max-width: 1080px;
    margin: -38px auto 0;
-   padding: 0 clamp(18px, 4vw, 56px) 56px;
+   padding: 0 clamp(18px, 4vw, 56px) 34px;
+   min-height: clamp(360px, 48vh, 620px);
 }
 
 section {
@@ -241,6 +246,22 @@ section {
 
 section:first-child {
    border-top: 6px solid var(--yellow);
+}
+
+.tab-panel.active-panel {
+   animation: panelEnter 0.42s ease both;
+}
+
+@keyframes panelEnter {
+   from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+   }
+
+   to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+   }
 }
 
 h2 {
@@ -396,15 +417,22 @@ section li {
 }
 
 footer {
-   margin-top: 20px;
+   max-width: 1080px;
+   margin: 0 auto 56px;
    padding: 34px 20px;
+   border-radius: 8px;
    text-align: center;
    background: #111111;
    color: var(--cream);
+   box-shadow: var(--shadow);
 }
 
 footer p {
    margin: 8px 0;
+}
+
+footer h2 {
+   color: var(--cream);
 }
 
 footer a {
