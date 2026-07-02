@@ -177,6 +177,27 @@ nav a.active {
    color: var(--orange-bright);
 }
 
+.linkedin-button {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   min-height: 34px;
+   padding: 0 15px;
+   border: 1px solid rgba(255, 247, 223, 0.28);
+   border-radius: 999px;
+   background: rgba(255, 247, 223, 0.1);
+   color: var(--cream);
+   font-weight: 800;
+   box-shadow: none;
+   transition: transform 0.25s, background 0.25s, color 0.25s;
+}
+
+.linkedin-button:hover {
+   background: var(--orange-bright);
+   color: var(--ink);
+   transform: translateY(-2px);
+}
+
 .button-link,
 button {
    display: inline-flex;
