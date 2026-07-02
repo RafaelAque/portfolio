@@ -158,6 +158,25 @@ nav a.active {
    align-items: center;
 }
 
+.home-contact {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   gap: 10px 14px;
+   margin-top: 22px;
+   color: rgba(255, 247, 223, 0.88);
+   font-weight: 700;
+}
+
+.home-contact a {
+   color: var(--yellow);
+   text-decoration: none;
+}
+
+.home-contact a:hover {
+   color: var(--orange-bright);
+}
+
 .button-link,
 button {
    display: inline-flex;
@@ -464,6 +483,12 @@ footer a:hover {
    box-shadow: none;
 }
 
+.home-contact .email-copy {
+   min-height: 34px;
+   margin: 0;
+   padding: 0 13px;
+}
+
 .copy-toast {
    position: fixed;
    left: 50%;
@@ -587,6 +612,10 @@ body.dark footer {
    }
 
    .hero-actions {
+      justify-content: center;
+   }
+
+   .home-contact {
       justify-content: center;
    }
 
