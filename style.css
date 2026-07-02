@@ -240,20 +240,22 @@ section {
 }
 
 .home-panel {
-   overflow: hidden;
-   border-color: rgba(255, 247, 223, 0.16);
-   background: linear-gradient(135deg, #10100f 0%, #1d1711 48%, #d85d1c 82%, #ffd86b 120%);
+   overflow: visible;
+   border-color: transparent;
+   background: transparent;
    color: var(--cream);
+   box-shadow: none;
+   backdrop-filter: none;
 }
 
 .home-panel::after {
    content: "";
    position: absolute;
-   right: -100px;
-   bottom: -150px;
-   width: 360px;
-   height: 360px;
-   border: 36px solid rgba(255, 216, 107, 0.18);
+   right: -72px;
+   bottom: -128px;
+   width: 390px;
+   height: 390px;
+   border: 42px solid rgba(255, 216, 107, 0.14);
    border-radius: 50%;
 }
 
@@ -594,7 +596,7 @@ body.dark footer {
    }
 
    main {
-      margin-top: -26px;
+      margin-top: 24px;
    }
 
    .stats-panel {
