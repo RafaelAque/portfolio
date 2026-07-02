@@ -356,23 +356,13 @@ section li {
    text-transform: uppercase;
 }
 
-#projects,
-#mp1-week3,
-#m1-summative,
-#reserveai,
-#fellowshiphub,
-#rosaca-farms {
+#projects {
    display: grid;
    grid-template-columns: repeat(2, minmax(0, 1fr));
    gap: 14px;
 }
 
-#projects h2,
-#mp1-week3 h2,
-#m1-summative h2,
-#reserveai h2,
-#fellowshiphub h2,
-#rosaca-farms h2 {
+#projects h2 {
    grid-column: 1 / -1;
 }
 
@@ -611,12 +601,7 @@ body.dark footer {
       grid-template-columns: 1fr;
    }
 
-   #projects,
-   #mp1-week3,
-   #m1-summative,
-   #reserveai,
-   #fellowshiphub,
-   #rosaca-farms {
+   #projects {
       grid-template-columns: 1fr;
    }
 }
