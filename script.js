@@ -46,15 +46,15 @@ function setupTabs() {
    });
 
    window.addEventListener('hashchange', () => {
-      activatePanel(window.location.hash || '#achievements', false);
+      activatePanel(window.location.hash || '#home', false);
    });
 
-   activatePanel(window.location.hash || '#achievements', false);
+   activatePanel(window.location.hash || '#home', false);
 }
 
 function activatePanel(hash, updateHash) {
    const panelId = hash.replace('#', '');
-   const targetPanel = panels.find(panel => panel.id === panelId) || document.getElementById('achievements');
+   const targetPanel = panels.find(panel => panel.id === panelId) || document.getElementById('home');
 
    panels.forEach(panel => {
       const isActive = panel === targetPanel;
